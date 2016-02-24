@@ -2,7 +2,6 @@ module['exports'] = function bindHooks (Resource) {
 
   var arrObj = Object.getOwnPropertyNames(Resource.prototype);
   for ( var funcKey in arrObj ) {
-     // console.log(arrObj[funcKey], Resource.prototype[arrObj[funcKey]]);
      var og = Resource.prototype[arrObj[funcKey]];
      var localMethod = arrObj[funcKey]; 
      (function(og, localMethod){
@@ -10,8 +9,11 @@ module['exports'] = function bindHooks (Resource) {
          var args = Array.prototype.slice.call(arguments);
          // todo: beforeAll hooks
          var self = this;
-         beforeHooks(Resource.prototype[localMethod], args[0], function(){
+         beforeHooks(Resource.prototype[localMethod], args[0], function (err){
            var _cb = args[1];
+           if (err) {
+             return og.call(self, err, args[1]);
+           }
            og.call(self, args[0], function (err, d) {
              afterHooks(Resource.prototype[localMethod], d, args[1]);
            })
