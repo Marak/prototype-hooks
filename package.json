@@ -1,11 +1,36 @@
 {
-  "name": "resource-hooks",
+  "name": "prototype-hooks",
   "version": "1.0.0",
-  "description": "",
+  "description": "add before and after hooks to any JavaScript prototype chain",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tap test/*.js",
+    "cover": "nyc npm test",
+    "complexity": "plato -r -d ./reports/complexity index.js",
+    "lint": "jshint ."
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Marak <support@marak.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "nyc": "^10.1.2",
+    "plato": "^1.7.0",
+    "tap": "^9.0.3",
+    "tape": "^4.6.3"
+  },
+  "nyc": {
+    "all": false,
+    "exclude": [
+      "coverage",
+      "public",
+      "reports",
+      "test",
+      "node_modules"
+    ],
+    "reporter": [
+      "html",
+      "lcov",
+      "clover"
+    ],
+    "report-dir": "./reports/coverage"
+  }
 }
