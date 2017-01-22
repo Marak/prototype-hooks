@@ -16,34 +16,34 @@ npm install --save prototype-hooks
 
 ## Example Usage
 
-```
-  var hooks = require('protoype-hooks');
- 
-  var Creature = function (opts) {
-    this.name = opts.name;
-  };
-  
-  Creature.prototype.talk = function (data, cb) {
-    cb(null, this.name + ' says ' + data.text);
-  };
-  
-  hooks(Creature);
-  
-  var larry = new Creature({ name: "Larry" });
+```js
+var hooks = require('protoype-hooks');
 
-  larry.before('talk', function(data, next) {
-    data.text = data.text + "!";
-    next(null, data);
-  });
+var Creature = function (opts) {
+  this.name = opts.name;
+};
 
-  larry.after('talk', function(text, next) {
-    text = text + ' ... ';
-    next(null, text);
-  });
-  
-  larry.talk({ text: 'hi'}, function (err, result){
-    console.log(err, result);
-    // outputs: 'Larry says hi! ... '
-  })
+Creature.prototype.talk = function (data, cb) {
+  cb(null, this.name + ' says ' + data.text);
+};
+
+hooks(Creature);
+
+var larry = new Creature({ name: "Larry" });
+
+larry.before('talk', function(data, next) {
+  data.text = data.text + "!";
+  next(null, data);
+});
+
+larry.after('talk', function(text, next) {
+  text = text + ' ... ';
+  next(null, text);
+});
+
+larry.talk({ text: 'hi'}, function (err, result){
+  console.log(err, result);
+  // outputs: 'Larry says hi! ... '
+})
 
 ```
