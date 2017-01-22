@@ -12,9 +12,12 @@ module['exports'] = function bindHooks (Resource) {
          beforeHooks(Resource.prototype[localMethod], args[0], function (err){
            var _cb = args[1];
            if (err) {
-             return og.call(self, err, args[1]);
+             return _cb(err);
            }
            og.call(self, args[0], function (err, d) {
+             if (err) {
+               return _cb(err);
+             }
              afterHooks(Resource.prototype[localMethod], d, args[1]);
            })
          })
