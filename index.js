@@ -7,8 +7,12 @@ module['exports'] = function bindHooks (Resource) {
   })
   for ( var funcKey in arrObj ) {
      var og = Resource.prototype[arrObj[funcKey]];
-     var localMethod = arrObj[funcKey]; 
+     var localMethod = arrObj[funcKey];
      (function(og, localMethod){
+       // do not double wrap methods ( if parent API has called hooks() twice on the same Resource)
+       if (Resource.prototype[localMethod]._wrapped) {
+         return;
+       }
        Resource.prototype[localMethod] = function _wrap () {
          var args = Array.prototype.slice.call(arguments);
          // todo: beforeAll hooks
@@ -26,9 +30,10 @@ module['exports'] = function bindHooks (Resource) {
            })
          })
        }
+       Resource.prototype[localMethod]._wrapped = true;
      })(og, localMethod);
-     Resource.prototype[localMethod].before = [];
-     Resource.prototype[localMethod].after = [];
+     Resource.prototype[localMethod].before = Resource.prototype[localMethod].before || [];
+     Resource.prototype[localMethod].after = Resource.prototype[localMethod].after || [];
   }
 
   Resource.prototype.before = function (localMethod, cb) {
