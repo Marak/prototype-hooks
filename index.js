@@ -1,6 +1,10 @@
 module['exports'] = function bindHooks (Resource) {
-
   var arrObj = Object.getOwnPropertyNames(Resource.prototype);
+  arrObj = arrObj.filter(function(item){
+    if (['before', 'after', 'constructor', 'method', 'property'].indexOf(item) === -1) {
+      return item;
+    }
+  })
   for ( var funcKey in arrObj ) {
      var og = Resource.prototype[arrObj[funcKey]];
      var localMethod = arrObj[funcKey]; 
@@ -26,8 +30,6 @@ module['exports'] = function bindHooks (Resource) {
      Resource.prototype[localMethod].before = [];
      Resource.prototype[localMethod].after = [];
   }
-
-  Resource.prototype.methods = {};
 
   Resource.prototype.before = function (localMethod, cb) {
     Resource.prototype[localMethod].before.unshift(cb);
