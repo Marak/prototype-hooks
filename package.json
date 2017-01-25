@@ -1,6 +1,6 @@
 {
   "name": "prototype-hooks",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "add before and after hooks to any JavaScript prototype chain",
   "main": "index.js",
   "scripts": {
